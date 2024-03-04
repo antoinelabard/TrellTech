@@ -1,12 +1,13 @@
-import 'package:http/http.dart' as http;
-import 'dart:developer' as developer;
+import 'package:trelltech/data/entities/BoardEntity.dart';
+import 'package:trelltech/data/methods/BoardMethods.dart';
+
+import 'methods/BoardMethods.dart';
 
 class Repository {
-  Future<http.Response> fetchAlbum() {
-    return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-  }
+  static BoardMethods Board = BoardMethods();
 }
+
 Future<void> main() async {
   var repo = Repository();
-  print(await repo.fetchAlbum().then((res) => res.body));
+  print(await Repository.Board.getBoard("lqkjsdf").then((res) => res));
 }
