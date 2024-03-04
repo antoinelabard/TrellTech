@@ -5,7 +5,6 @@ class CardEntity {
   String? due;
   String? idBoard;
   String? idList;
-  List<String>? idMembers;
   String? name;
 
   CardEntity(
@@ -15,7 +14,6 @@ class CardEntity {
       this.due,
       this.idBoard,
       this.idList,
-      this.idMembers,
       this.name});
 
   CardEntity.fromJson(Map<String, dynamic> json) {
@@ -25,7 +23,6 @@ class CardEntity {
     due = json['due'];
     idBoard = json['idBoard'];
     idList = json['idList'];
-    idMembers = json['idMembers'].cast<String>();
     name = json['name'];
   }
 
@@ -37,7 +34,6 @@ class CardEntity {
     data['due'] = this.due;
     data['idBoard'] = this.idBoard;
     data['idList'] = this.idList;
-    data['idMembers'] = this.idMembers;
     data['name'] = this.name;
     return data;
   }
