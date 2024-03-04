@@ -54,6 +54,22 @@ func main() {
 		json.NewEncoder(w).Encode(response)
 	}).Methods("PUT")
 
+	r.HandleFunc("/get-all-organizations", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
+
+		responses, err := controller.GetAllOrganizations(apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error getting all organizations", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(responses)
+	}).Methods("GET")
+
 	r.HandleFunc("/delete-organization/{id}", controller.HandleDeleteOrganization).Methods("DELETE")
 
 	// BOARDS
