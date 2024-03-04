@@ -75,6 +75,26 @@ func main() {
 	// BOARDS
 	r.HandleFunc("/create-board", controller.HandleCreateBoard).Methods("POST")
 
+	r.HandleFunc("/update-board/{id}", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
+
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		response, err := controller.UpdateBoard(r, id, apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error updating board", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(response)
+	}).Methods("PUT")
+
+	//SERVER
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

@@ -68,3 +68,53 @@ func HandleCreateBoard(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(response)
 }
+
+type UpdateBoardRequest struct {
+	NewName           string `json:"name"`
+	NewIdOrganization string `json:"idOrganization"`
+}
+
+func UpdateBoard(r *http.Request, id, apiKey, apiToken string) (*Response, error) {
+	var updateBoardRequest UpdateBoardRequest
+	err := json.NewDecoder(r.Body).Decode(&updateBoardRequest)
+	if err != nil {
+		return nil, fmt.Errorf("error decoding request body: %v", err)
+	}
+
+	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/?key=%s&token=%s", id, apiKey, apiToken)
+
+	if updateBoardRequest.NewIdOrganization != "" {
+		url = fmt.Sprintf("%s&idOrganization=%s", url, updateBoardRequest.NewIdOrganization)
+	}
+
+	if updateBoardRequest.NewName != "" {
+		url = fmt.Sprintf("%s&name=%s", url, updateBoardRequest.NewName)
+	}
+	fmt.Printf("New name: %s\n", updateBoardRequest.NewName)
+
+	req, err := http.NewRequest("PUT", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %v", err)
+	}
+
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error sending request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	var response Response
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
+	}
+	return &response, nil
+}
