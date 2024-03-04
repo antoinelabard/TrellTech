@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"server/login"
 	"server/utils"
 	"server/workspace"
 
@@ -55,6 +56,8 @@ func main() {
 	}).Methods("PUT")
 
 	r.HandleFunc("/delete-organization/{id}", workspace.HandleDeleteOrganization).Methods("DELETE")
+
+	r.HandleFunc("/login", login.Handler).Methods("GET")
 
 	port := os.Getenv("PORT")
 	if port == "" {
