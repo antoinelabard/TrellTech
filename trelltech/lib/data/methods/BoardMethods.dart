@@ -32,3 +32,4 @@ class BoardMethods {
   Future<void> delete(String id) {
     return Future(() => null);
   }
+}
