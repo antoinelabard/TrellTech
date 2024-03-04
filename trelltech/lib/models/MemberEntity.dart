@@ -1,7 +1,7 @@
 class MemberEntity {
-  String id;
-  String fullName;
-  String username;
+  String? id;
+  String? fullName;
+  String? username;
 
   MemberEntity({this.id, this.fullName, this.username});
 
