@@ -9,5 +9,5 @@ class Repository {
 
 Future<void> main() async {
   var repo = Repository();
-  print(await Repository.Board.getBoard("lqkjsdf").then((res) => res));
+  print(await Repository.Board.get("lqkjsdf").then((res) => res));
 }
