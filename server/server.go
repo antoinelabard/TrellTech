@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"server/login"
+	"server/controller"
 	"server/utils"
-	"server/workspace"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -21,7 +20,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/create-organization", workspace.HandleCreateOrganization).Methods("POST")
+	r.HandleFunc("/create-organization", controller.HandleCreateOrganization).Methods("POST")
 
 	r.HandleFunc("/get-organization/{id}", func(w http.ResponseWriter, r *http.Request) {
 		apiKey, apiToken, err := utils.LoadAPIKeys()
@@ -30,7 +29,7 @@ func main() {
 			return
 		}
 
-		response, err := workspace.GetOrganization(r, apiKey, apiToken)
+		response, err := controller.GetOrganization(r, apiKey, apiToken)
 		if err != nil {
 			http.Error(w, "Error getting organization", http.StatusInternalServerError)
 			return
@@ -46,7 +45,7 @@ func main() {
 			return
 		}
 
-		response, err := workspace.UpdateOrganization(r, apiKey, apiToken)
+		response, err := controller.UpdateOrganization(r, apiKey, apiToken)
 		if err != nil {
 			http.Error(w, "Error updating organization", http.StatusInternalServerError)
 			return
@@ -55,9 +54,10 @@ func main() {
 		json.NewEncoder(w).Encode(response)
 	}).Methods("PUT")
 
-	r.HandleFunc("/delete-organization/{id}", workspace.HandleDeleteOrganization).Methods("DELETE")
+	r.HandleFunc("/delete-organization/{id}", controller.HandleDeleteOrganization).Methods("DELETE")
 
-	r.HandleFunc("/login", login.Handler).Methods("GET")
+	// BOARDS
+	r.HandleFunc("/create-board", controller.HandleCreateBoard).Methods("POST")
 
 	port := os.Getenv("PORT")
 	if port == "" {
