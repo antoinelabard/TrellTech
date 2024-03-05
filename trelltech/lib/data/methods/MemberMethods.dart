@@ -7,15 +7,15 @@ class MemberMethods {
         () => MemberEntity(id: "idmember", username: "username"));
   }
 
-  Future<void> create(String id, String username) {
+  Future<void> create(MemberEntity memberEntity) {
     return Future(() => null);
   }
 
-  Future<void> update(String id, String username) {
+  Future<void> update(MemberEntity memberEntity) {
     return Future(() => null);
   }
 
-  Future<void> delete(String id) {
+  Future<void> delete(MemberEntity memberEntity) {
     return Future(() => null);
   }
 }

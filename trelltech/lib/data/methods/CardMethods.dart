@@ -8,15 +8,15 @@ class CardMethods {
             id: "id", closed: false, dateLastActivity: DateTime.now()));
   }
 
-  Future<void> create(String id) {
+  Future<void> create(CardEntity cardEntity) {
     return Future(() => null);
   }
 
-  Future<void> update(String id) {
+  Future<void> update(CardEntity cardEntity) {
     return Future(() => null);
   }
 
-  Future<void> delete(String id) {
+  Future<void> delete(CardEntity cardEntity) {
     return Future(() => null);
   }
 }

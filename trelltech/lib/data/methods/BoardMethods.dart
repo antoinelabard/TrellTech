@@ -21,15 +21,15 @@ class BoardMethods {
         ]);
   }
 
-  Future<void> create(String id) {
+  Future<void> create(BoardEntity boardEntity) {
     return Future(() => null);
   }
 
-  Future<void> update(String id) {
+  Future<void> update(BoardEntity boardEntity) {
     return Future(() => null);
   }
 
-  Future<void> delete(String id) {
+  Future<void> delete(BoardEntity boardEntity) {
     return Future(() => null);
   }
 }

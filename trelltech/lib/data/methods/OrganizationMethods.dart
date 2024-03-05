@@ -10,7 +10,7 @@ class OrganizationMethods {
             OrganizationEntity(id: "idorga", displayName: "displaynameorga"));
   }
 
-  Future<List<MemberEntity>> getMembers(String id) {
+  Future<List<MemberEntity>> getMembers(OrganizationEntity organizationEntity) {
     return Future.delayed(
         Duration(seconds: 1),
             () =>
@@ -21,7 +21,7 @@ class OrganizationMethods {
         ]);
   }
 
-  Future<List<BoardEntity>> getBoards(String id) {
+  Future<List<BoardEntity>> getBoards(OrganizationEntity organizationEntity) {
     return Future.delayed(
         Duration(seconds: 1),
             () =>
@@ -32,15 +32,15 @@ class OrganizationMethods {
         ]);
   }
 
-  Future<void> create(OrganizationEntity) {
+  Future<void> create(OrganizationEntity organizationEntity) {
     return Future(() => null);
   }
 
-  Future<void> update(OrganizationEntity) {
+  Future<void> update(OrganizationEntity organizationEntity) {
     return Future(() => null);
   }
 
-  Future<void> delete(OrganizationEntity) {
+  Future<void> delete(OrganizationEntity organizationEntity) {
     return Future(() => null);
   }
 }
