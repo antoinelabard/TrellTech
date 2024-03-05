@@ -94,6 +94,25 @@ func main() {
 		json.NewEncoder(w).Encode(response)
 	}).Methods("PUT")
 
+	r.HandleFunc("/get-board/{id}", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
+
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		boardName, err := controller.GetBoard(id, apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error getting board", http.StatusInternalServerError)
+			return
+		}
+
+		w.Write([]byte(boardName))
+	}).Methods("GET")
+
 	//SERVER
 	port := os.Getenv("PORT")
 	if port == "" {

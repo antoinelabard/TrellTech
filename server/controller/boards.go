@@ -118,3 +118,44 @@ func UpdateBoard(r *http.Request, id, apiKey, apiToken string) (*Response, error
 	}
 	return &response, nil
 }
+
+type Board struct {
+	Name string `json:"name"`
+}
+
+func GetBoard(id, apiKey, apiToken string) (string, error) {
+	// Construction de l'URL de l'API
+	url := fmt.Sprintf("https://api.trello.com/1/boards/%s?key=%s&token=%s", id, apiKey, apiToken)
+
+	// Création de la requête HTTP
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return "", err
+	}
+
+	// Ajout de l'en-tête Accept à la requête
+	req.Header.Set("Accept", "application/json")
+
+	// Envoi de la requête HTTP
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	// Lecture de la réponse HTTP
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	// Décodage de la réponse JSON dans la structure Board
+	var board Board
+	err = json.Unmarshal(body, &board)
+	if err != nil {
+		return "", err
+	}
+
+	// Retourner le nom du tableau
+	return board.Name, nil
+}
