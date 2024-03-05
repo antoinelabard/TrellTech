@@ -13,6 +13,7 @@ type ListResponse struct {
 }
 
 func CreateList(idBoard, name, apiKey, apiToken string) (*ListResponse, error) {
+	fmt.Println("Creating list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists?name=%s&idBoard=%s&key=%s&token=%s", name, idBoard, apiKey, apiToken)
 
 	req, err := http.NewRequest("POST", url, nil)
@@ -50,6 +51,7 @@ type Lists struct {
 }
 
 func GetListsinaboard(idBoard, apiKey, apiToken string) ([]*List, error) {
+	fmt.Println("Getting lists in a boards")
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/lists?key=%s&token=%s", idBoard, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -82,6 +84,7 @@ func GetListsinaboard(idBoard, apiKey, apiToken string) ([]*List, error) {
 }
 
 func UpdateList(idList, newName, apiKey, apiToken string) (*ListResponse, error) {
+	fmt.Println("Updating list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s?name=%s&key=%s&token=%s", idList, newName, apiKey, apiToken)
 
 	req, err := http.NewRequest("PUT", url, nil)
@@ -119,6 +122,7 @@ type Card struct {
 }
 
 func GetCards(idList, apiKey, apiToken string) ([]*Card, error) {
+	fmt.Println("Getting cards")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s/cards?key=%s&token=%s", idList, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -156,6 +160,7 @@ type List struct {
 }
 
 func GetList(idList, apiKey, apiToken string) (*List, error) {
+	fmt.Println("Getting list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s?key=%s&token=%s", idList, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
