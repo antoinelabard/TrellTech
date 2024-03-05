@@ -159,3 +159,43 @@ func GetBoard(id, apiKey, apiToken string) (string, error) {
 	// Retourner le nom du tableau
 	return board.Name, nil
 }
+
+type Member struct {
+	Id   string `json:"id"`
+	Name string `json:"fullName"`
+}
+
+func GetMembers(boardId, apiKey, apiToken string) ([]*Member, error) {
+	// Construction de l'URL de l'API
+	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/memberships?key=%s&token=%s", boardId, apiKey, apiToken)
+
+	// Création de la requête HTTP
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Ajout de l'en-tête Accept à la requête
+	req.Header.Set("Accept", "application/json")
+
+	// Envoi de la requête HTTP
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Lecture de la réponse HTTP
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Décodage de la réponse JSON dans la structure Member
+	var members []*Member
+	err = json.Unmarshal(body, &members)
+	if err != nil {
+		return nil, err
+	}
+	return members, nil
+}

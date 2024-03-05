@@ -113,6 +113,24 @@ func main() {
 		w.Write([]byte(boardName))
 	}).Methods("GET")
 
+	r.HandleFunc("/get-members/{boardId}", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
+
+		vars := mux.Vars(r)
+		boardId := vars["boardId"]
+
+		members, err := controller.GetMembers(boardId, apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error getting members", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(members)
+	}).Methods("GET")
 	//SERVER
 	port := os.Getenv("PORT")
 	if port == "" {
