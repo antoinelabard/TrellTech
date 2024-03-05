@@ -111,6 +111,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: WorkspaceCategories(selectedWorkspace),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddBoardDialog(context);
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
@@ -176,3 +182,16 @@ class WorkspaceCategory extends StatelessWidget {
     );
   }
 }
+
+void _showAddBoardDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Ajouter un tableau'),
+
+      )
+    }
+  )
+}
+
