@@ -174,6 +174,8 @@ func handleDeleteBoard(w http.ResponseWriter, r *http.Request) {
 
 func ListRoutes(r *mux.Router) {
 	r.HandleFunc("/create-list", handleCreateList).Methods("POST")
+	r.HandleFunc("/get-lists/{idBoard}", handleGetLists).Methods("GET")
+	r.HandleFunc("/update-list/{idList}", handleUpdateList).Methods("PUT")
 }
 
 func handleCreateList(w http.ResponseWriter, r *http.Request) {
@@ -197,6 +199,54 @@ func handleCreateList(w http.ResponseWriter, r *http.Request) {
 	listResponse, err := controller.CreateList(createListRequest.IdBoard, createListRequest.Name, apiKey, apiToken)
 	if err != nil {
 		http.Error(w, "Error creating list", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(listResponse)
+}
+
+func handleGetLists(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	idBoard := vars["idBoard"]
+
+	lists, err := controller.GetLists(idBoard, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error getting lists", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(lists)
+}
+
+func handleUpdateList(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	idList := vars["idList"]
+
+	// Extract newName from the request body
+	var updateListRequest struct {
+		NewName string `json:"name"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&updateListRequest)
+	if err != nil {
+		http.Error(w, "Error decoding request body", http.StatusBadRequest)
+		return
+	}
+
+	listResponse, err := controller.UpdateList(idList, updateListRequest.NewName, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error updating list", http.StatusInternalServerError)
 		return
 	}
 
