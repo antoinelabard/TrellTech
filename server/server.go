@@ -71,7 +71,24 @@ func main() {
 	}).Methods("GET")
 
 	r.HandleFunc("/delete-organization/{id}", controller.HandleDeleteOrganization).Methods("DELETE")
+	r.HandleFunc("/get-organization-boards/{id}", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
 
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		boards, err := controller.GetOrganizationBoards(id, apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error getting organization boards", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(boards)
+	}).Methods("GET")
 	// BOARDS
 	r.HandleFunc("/create-board", controller.HandleCreateBoard).Methods("POST")
 

@@ -279,3 +279,37 @@ func HandleCreateOrganization(w http.ResponseWriter, r *http.Request) {
 	// Envoi de la réponse au client
 	json.NewEncoder(w).Encode(response)
 }
+
+type BoardResponse struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func GetOrganizationBoards(id, apiKey, apiToken string) ([]*BoardResponse, error) {
+	url := fmt.Sprintf("https://api.trello.com/1/organizations/%s/boards?key=%s&token=%s&fields=id,name", id, apiKey, apiToken)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var boards []*BoardResponse
+	err = json.Unmarshal(body, &boards)
+	if err != nil {
+		return nil, err
+	}
+	return boards, nil
+}
