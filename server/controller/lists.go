@@ -84,6 +84,7 @@ func GetListsinaboard(idBoard, apiKey, apiToken string) ([]*List, error) {
 }
 
 func UpdateList(idList, newName, apiKey, apiToken string) (*ListResponse, error) {
+	fmt.Println("Updating list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s?name=%s&key=%s&token=%s", idList, newName, apiKey, apiToken)
 
 	req, err := http.NewRequest("PUT", url, nil)
