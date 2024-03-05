@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"server/controller"
 	"server/utils"
@@ -299,6 +300,7 @@ func CardRoutes(r *mux.Router) {
 	r.HandleFunc("/create-card", handleCreateCard).Methods("POST")
 	r.HandleFunc("/get-card/{id}", handleGetCard).Methods("GET")
 	r.HandleFunc("/update-card/{id}", handleUpdateCard).Methods("PUT")
+	r.HandleFunc("/delete-card/{id}", handleDeleteCard).Methods("DELETE")
 }
 
 func handleCreateCard(w http.ResponseWriter, r *http.Request) {
@@ -373,4 +375,45 @@ func handleUpdateCard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(cardResponse)
+}
+
+func DeleteCard(id, apiKey, apiToken string) error {
+	fmt.Println("Deleting card")
+	url := fmt.Sprintf("https://api.trello.com/1/cards/%s?key=%s&token=%s", id, apiKey, apiToken)
+
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func handleDeleteCard(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	err = controller.DeleteCard(id, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error deleting card", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
