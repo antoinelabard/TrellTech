@@ -51,7 +51,7 @@ type Lists struct {
 }
 
 func GetListsinaboard(idBoard, apiKey, apiToken string) ([]*List, error) {
-	fmt.Println("Getting lists")
+	fmt.Println("Getting lists in a boards")
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/lists?key=%s&token=%s", idBoard, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -160,6 +160,7 @@ type List struct {
 }
 
 func GetList(idList, apiKey, apiToken string) (*List, error) {
+	fmt.Println("Getting list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s?key=%s&token=%s", idList, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
