@@ -169,3 +169,36 @@ func handleDeleteBoard(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// LISTS
+
+func ListRoutes(r *mux.Router) {
+	r.HandleFunc("/create-list", handleCreateList).Methods("POST")
+}
+
+func handleCreateList(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	// Extract idBoard and name from the request body
+	var createListRequest struct {
+		IdBoard string `json:"idBoard"`
+		Name    string `json:"name"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&createListRequest)
+	if err != nil {
+		http.Error(w, "Error decoding request body", http.StatusBadRequest)
+		return
+	}
+
+	listResponse, err := controller.CreateList(createListRequest.IdBoard, createListRequest.Name, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error creating list", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(listResponse)
+}

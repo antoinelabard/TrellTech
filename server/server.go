@@ -16,9 +16,14 @@ func main() {
 
 	r := mux.NewRouter()
 
+	// WORKSPACES
 	WorkspaceRoutes(r)
+
 	// BOARDS
 	BoardRoutes(r)
+
+	// LISTS
+	ListRoutes(r)
 
 	//SERVER
 	port := os.Getenv("PORT")
