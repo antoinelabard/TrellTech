@@ -25,6 +25,9 @@ func main() {
 	// LISTS
 	ListRoutes(r)
 
+	// CARDS
+	CardRoutes(r)
+
 	//SERVER
 	port := os.Getenv("PORT")
 	if port == "" {
