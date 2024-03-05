@@ -12,7 +12,8 @@ import (
 
 // Structure de la réponse de l'API Trello
 type Response struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 type CreateRequest struct {
 	DisplayName string `json:"displayName"`
@@ -217,6 +218,41 @@ func HandleDeleteOrganization(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func GetAllOrganizations(apiKey, apiToken string) ([]*Response, error) {
+	// Construction de l'URL de l'API
+	url := fmt.Sprintf("https://api.trello.com/1/members/me/organizations?key=%s&token=%s&fields=id,name", apiKey, apiToken)
+
+	// Création de la requête HTTP
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Ajout de l'en-tête Accept à la requête
+	req.Header.Set("Accept", "application/json")
+
+	// Envoi de la requête HTTP
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Lecture de la réponse HTTP
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Décodage de la réponse JSON dans la structure Response
+	var responses []*Response
+	err = json.Unmarshal(body, &responses)
+	if err != nil {
+		return nil, err
+	}
+	return responses, nil
+}
+
 // Gestionnaire de route pour créer une organisation
 func HandleCreateOrganization(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
@@ -242,4 +278,38 @@ func HandleCreateOrganization(w http.ResponseWriter, r *http.Request) {
 
 	// Envoi de la réponse au client
 	json.NewEncoder(w).Encode(response)
+}
+
+type BoardResponse struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func GetOrganizationBoards(id, apiKey, apiToken string) ([]*BoardResponse, error) {
+	url := fmt.Sprintf("https://api.trello.com/1/organizations/%s/boards?key=%s&token=%s&fields=id,name", id, apiKey, apiToken)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var boards []*BoardResponse
+	err = json.Unmarshal(body, &boards)
+	if err != nil {
+		return nil, err
+	}
+	return boards, nil
 }
