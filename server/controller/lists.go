@@ -122,6 +122,7 @@ type Card struct {
 }
 
 func GetCards(idList, apiKey, apiToken string) ([]*Card, error) {
+	fmt.Println("Getting cards")
 	url := fmt.Sprintf("https://api.trello.com/1/lists/%s/cards?key=%s&token=%s", idList, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
