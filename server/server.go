@@ -5,36 +5,36 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"server/controller"
 	"server/utils"
-	"server/workspace"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		fmt.Println("Error loading .env file")
 		return
 	}
 
 	r := mux.NewRouter()
 
-	// Définir les routes ici
-	r.HandleFunc("/create-organization", workspace.HandleCreateOrganization).Methods("POST")
-	// TES DANS POSTMAN HEADER KEY VALUE / displayName Test
+	r.HandleFunc("/create-organization", controller.HandleCreateOrganization).Methods("POST")
+
 	r.HandleFunc("/get-organization/{id}", func(w http.ResponseWriter, r *http.Request) {
 		apiKey, apiToken, err := utils.LoadAPIKeys()
 		if err != nil {
 			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
 			return
 		}
-		response, err := workspace.GetOrganization(r, apiKey, apiToken)
+
+		response, err := controller.GetOrganization(r, apiKey, apiToken)
 		if err != nil {
 			http.Error(w, "Error getting organization", http.StatusInternalServerError)
 			return
 		}
+
 		json.NewEncoder(w).Encode(response)
 	}).Methods("GET")
 
@@ -44,20 +44,26 @@ func main() {
 			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
 			return
 		}
-		response, err := workspace.UpdateOrganization(r, apiKey, apiToken)
+
+		response, err := controller.UpdateOrganization(r, apiKey, apiToken)
 		if err != nil {
 			http.Error(w, "Error updating organization", http.StatusInternalServerError)
 			return
 		}
+
 		json.NewEncoder(w).Encode(response)
 	}).Methods("PUT")
+
+	r.HandleFunc("/delete-organization/{id}", controller.HandleDeleteOrganization).Methods("DELETE")
+
+	// BOARDS
+	r.HandleFunc("/create-board", controller.HandleCreateBoard).Methods("POST")
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	// Lancer le serveur
 	fmt.Printf("Server listening on port %s\n", port)
 	http.ListenAndServe(":"+port, r)
 }
