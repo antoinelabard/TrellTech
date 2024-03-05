@@ -22,6 +22,7 @@ func CreateBoard(r *http.Request, apiKey, apiToken string) (*Response, error) {
 	}
 
 	url := fmt.Sprintf("https://api.trello.com/1/boards/?name=%s&idOrganization=%s&key=%s&token=%s", createBoardRequest.Name, createBoardRequest.IdOrganization, apiKey, apiToken)
+	fmt.Printf("Creating board with URL: %s\n", url) // Ajout du message de débogage
 
 	reqBody, err := json.Marshal(createBoardRequest)
 	if err != nil {
@@ -51,8 +52,10 @@ func CreateBoard(r *http.Request, apiKey, apiToken string) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
 	}
+	fmt.Printf("Board created with response: %v\n", response) // Ajout du message de débogage
 	return &response, nil
 }
+
 func HandleCreateBoard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
@@ -90,7 +93,7 @@ func UpdateBoard(r *http.Request, id, apiKey, apiToken string) (*Response, error
 	if updateBoardRequest.NewName != "" {
 		url = fmt.Sprintf("%s&name=%s", url, updateBoardRequest.NewName)
 	}
-	fmt.Printf("New name: %s\n", updateBoardRequest.NewName)
+	fmt.Printf("Updating board with URL: %s\n", url) // Ajout du message de débogage
 
 	req, err := http.NewRequest("PUT", url, nil)
 	if err != nil {
@@ -116,6 +119,7 @@ func UpdateBoard(r *http.Request, id, apiKey, apiToken string) (*Response, error
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
 	}
+	fmt.Printf("Board updated with response: %v\n", response) // Ajout du message de débogage
 	return &response, nil
 }
 
@@ -126,6 +130,7 @@ type Board struct {
 func GetBoard(id, apiKey, apiToken string) (string, error) {
 	// Construction de l'URL de l'API
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s?key=%s&token=%s", id, apiKey, apiToken)
+	fmt.Printf("Getting board with URL: %s\n", url) // Ajout du message de débogage
 
 	// Création de la requête HTTP
 	req, err := http.NewRequest("GET", url, nil)
@@ -157,6 +162,7 @@ func GetBoard(id, apiKey, apiToken string) (string, error) {
 	}
 
 	// Retourner le nom du tableau
+	fmt.Printf("Board retrieved with name: %s\n", board.Name) // Ajout du message de débogage
 	return board.Name, nil
 }
 
@@ -168,6 +174,7 @@ type Member struct {
 func GetMembers(boardId, apiKey, apiToken string) ([]*Member, error) {
 	// Construction de l'URL de l'API
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/memberships?key=%s&token=%s", boardId, apiKey, apiToken)
+	fmt.Printf("Getting members with URL: %s\n", url) // Ajout du message de débogage
 
 	// Création de la requête HTTP
 	req, err := http.NewRequest("GET", url, nil)
@@ -197,5 +204,33 @@ func GetMembers(boardId, apiKey, apiToken string) ([]*Member, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("Members retrieved: %v\n", members) // Ajout du message de débogage
 	return members, nil
+}
+
+func DeleteBoard(boardId, apiKey, apiToken string) error {
+	// Construction de l'URL de l'API
+	url := fmt.Sprintf("https://api.trello.com/1/boards/%s?key=%s&token=%s", boardId, apiKey, apiToken)
+	fmt.Printf("Deleting board with URL: %s\n", url) // Ajout du message de débogage
+
+	// Création de la requête HTTP
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return err
+	}
+
+	// Envoi de la requête HTTP
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Vérification du code de statut HTTP
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+	fmt.Printf("Board with ID %s has been deleted successfully.\n", boardId)
+
+	return nil
 }

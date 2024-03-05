@@ -131,6 +131,26 @@ func main() {
 
 		json.NewEncoder(w).Encode(members)
 	}).Methods("GET")
+
+	r.HandleFunc("/delete-board/{boardId}", func(w http.ResponseWriter, r *http.Request) {
+		apiKey, apiToken, err := utils.LoadAPIKeys()
+		if err != nil {
+			http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+			return
+		}
+
+		vars := mux.Vars(r)
+		boardId := vars["boardId"]
+
+		err = controller.DeleteBoard(boardId, apiKey, apiToken)
+		if err != nil {
+			http.Error(w, "Error deleting board", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}).Methods("DELETE")
+
 	//SERVER
 	port := os.Getenv("PORT")
 	if port == "" {
