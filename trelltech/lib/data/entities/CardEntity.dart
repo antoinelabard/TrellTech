@@ -2,7 +2,7 @@ class CardEntity {
   String? id;
   bool? closed;
   DateTime? dateLastActivity;
-  String? due;
+  DateTime? due;
   String? idBoard;
   String? idList;
   String? name;
