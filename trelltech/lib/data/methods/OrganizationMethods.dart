@@ -32,6 +32,17 @@ class OrganizationMethods {
         ]);
   }
 
+  Future<List<OrganizationEntity>> getJoinedOrganizations(MemberEntity memberEntity) {
+    return Future.delayed(
+        Duration(seconds: 1),
+            () =>
+        [
+          OrganizationEntity(id: "idorga1", displayName: "displaynameorga"),
+          OrganizationEntity(id: "idorga2", displayName: "displaynameorga"),
+          OrganizationEntity(id: "idorga3", displayName: "displaynameorga")
+        ]);
+  }
+
   Future<void> create(OrganizationEntity organizationEntity) {
     return Future(() => null);
   }
