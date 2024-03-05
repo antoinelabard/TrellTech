@@ -297,6 +297,8 @@ func handleGetList(w http.ResponseWriter, r *http.Request) {
 
 func CardRoutes(r *mux.Router) {
 	r.HandleFunc("/create-card", handleCreateCard).Methods("POST")
+	r.HandleFunc("/get-card/{id}", handleGetCard).Methods("GET")
+	r.HandleFunc("/update-card/{id}", handleUpdateCard).Methods("PUT")
 }
 
 func handleCreateCard(w http.ResponseWriter, r *http.Request) {
@@ -320,6 +322,53 @@ func handleCreateCard(w http.ResponseWriter, r *http.Request) {
 	cardResponse, err := controller.CreateCard(createCardRequest.IdList, createCardRequest.Name, apiKey, apiToken)
 	if err != nil {
 		http.Error(w, "Error creating card", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cardResponse)
+}
+
+func handleGetCard(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	cardResponse, err := controller.GetCard(id, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error getting card", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cardResponse)
+}
+func handleUpdateCard(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	// Extract newName from the request body
+	var updateCardRequest struct {
+		NewName string `json:"name"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&updateCardRequest)
+	if err != nil {
+		http.Error(w, "Error decoding request body", http.StatusBadRequest)
+		return
+	}
+
+	cardResponse, err := controller.UpdateCard(id, updateCardRequest.NewName, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error updating card", http.StatusInternalServerError)
 		return
 	}
 
