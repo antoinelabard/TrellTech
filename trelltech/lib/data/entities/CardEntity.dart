@@ -1,8 +1,8 @@
 class CardEntity {
   String? id;
   bool? closed;
-  String? dateLastActivity;
-  String? due;
+  DateTime? dateLastActivity;
+  DateTime? due;
   String? idBoard;
   String? idList;
   String? name;
@@ -19,7 +19,7 @@ class CardEntity {
   CardEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     closed = json['closed'];
-    dateLastActivity = json['dateLastActivity'];
+    dateLastActivity = DateTime.parse(json['dateLastActivity']);
     due = json['due'];
     idBoard = json['idBoard'];
     idList = json['idList'];
