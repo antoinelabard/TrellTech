@@ -44,12 +44,12 @@ func CreateList(idBoard, name, apiKey, apiToken string) (*ListResponse, error) {
 	return &listResponse, nil
 }
 
-type List struct {
+type Lists struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-func GetLists(idBoard, apiKey, apiToken string) ([]*List, error) {
+func GetListsinaboard(idBoard, apiKey, apiToken string) ([]*List, error) {
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s/lists?key=%s&token=%s", idBoard, apiKey, apiToken)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -148,4 +148,41 @@ func GetCards(idList, apiKey, apiToken string) ([]*Card, error) {
 	}
 
 	return cards, nil
+}
+
+type List struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func GetList(idList, apiKey, apiToken string) (*List, error) {
+	url := fmt.Sprintf("https://api.trello.com/1/lists/%s?key=%s&token=%s", idList, apiKey, apiToken)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var list List
+	err = json.Unmarshal(body, &list)
+	if err != nil {
+		return nil, err
+	}
+
+	return &list, nil
 }

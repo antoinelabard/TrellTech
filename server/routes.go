@@ -174,9 +174,10 @@ func handleDeleteBoard(w http.ResponseWriter, r *http.Request) {
 
 func ListRoutes(r *mux.Router) {
 	r.HandleFunc("/create-list", handleCreateList).Methods("POST")
-	r.HandleFunc("/get-lists/{idBoard}", handleGetLists).Methods("GET")
+	r.HandleFunc("/get-lists-board/{idBoard}", handleGetListsinaboard).Methods("GET")
 	r.HandleFunc("/update-list/{idList}", handleUpdateList).Methods("PUT")
 	r.HandleFunc("/get-cards/{idList}", handleGetCards).Methods("GET")
+	r.HandleFunc("/get-list/{idList}", handleGetList).Methods("GET")
 }
 
 func handleCreateList(w http.ResponseWriter, r *http.Request) {
@@ -206,7 +207,7 @@ func handleCreateList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listResponse)
 }
 
-func handleGetLists(w http.ResponseWriter, r *http.Request) {
+func handleGetListsinaboard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -216,7 +217,7 @@ func handleGetLists(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idBoard := vars["idBoard"]
 
-	lists, err := controller.GetLists(idBoard, apiKey, apiToken)
+	lists, err := controller.GetListsinaboard(idBoard, apiKey, apiToken)
 	if err != nil {
 		http.Error(w, "Error getting lists", http.StatusInternalServerError)
 		return
@@ -271,4 +272,23 @@ func handleGetCards(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(cards)
+}
+
+func handleGetList(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	idList := vars["idList"]
+
+	list, err := controller.GetList(idList, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error getting list", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(list)
 }
