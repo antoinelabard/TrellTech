@@ -292,3 +292,36 @@ func handleGetList(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(list)
 }
+
+// CARDS
+
+func CardRoutes(r *mux.Router) {
+	r.HandleFunc("/create-card", handleCreateCard).Methods("POST")
+}
+
+func handleCreateCard(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	// Extract idList and name from the request body
+	var createCardRequest struct {
+		IdList string `json:"idList"`
+		Name   string `json:"name"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&createCardRequest)
+	if err != nil {
+		http.Error(w, "Error decoding request body", http.StatusBadRequest)
+		return
+	}
+
+	cardResponse, err := controller.CreateCard(createCardRequest.IdList, createCardRequest.Name, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error creating card", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cardResponse)
+}
