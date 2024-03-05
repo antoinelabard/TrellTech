@@ -176,6 +176,7 @@ func ListRoutes(r *mux.Router) {
 	r.HandleFunc("/create-list", handleCreateList).Methods("POST")
 	r.HandleFunc("/get-lists/{idBoard}", handleGetLists).Methods("GET")
 	r.HandleFunc("/update-list/{idList}", handleUpdateList).Methods("PUT")
+	r.HandleFunc("/get-cards/{idList}", handleGetCards).Methods("GET")
 }
 
 func handleCreateList(w http.ResponseWriter, r *http.Request) {
@@ -251,4 +252,23 @@ func handleUpdateList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(listResponse)
+}
+
+func handleGetCards(w http.ResponseWriter, r *http.Request) {
+	apiKey, apiToken, err := utils.LoadAPIKeys()
+	if err != nil {
+		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
+		return
+	}
+
+	vars := mux.Vars(r)
+	idList := vars["idList"]
+
+	cards, err := controller.GetCards(idList, apiKey, apiToken)
+	if err != nil {
+		http.Error(w, "Error getting cards", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cards)
 }

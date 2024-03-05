@@ -112,3 +112,40 @@ func UpdateList(idList, newName, apiKey, apiToken string) (*ListResponse, error)
 
 	return &listResponse, nil
 }
+
+type Card struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func GetCards(idList, apiKey, apiToken string) ([]*Card, error) {
+	url := fmt.Sprintf("https://api.trello.com/1/lists/%s/cards?key=%s&token=%s", idList, apiKey, apiToken)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var cards []*Card
+	err = json.Unmarshal(body, &cards)
+	if err != nil {
+		return nil, err
+	}
+
+	return cards, nil
+}
