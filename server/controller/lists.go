@@ -13,6 +13,7 @@ type ListResponse struct {
 }
 
 func CreateList(idBoard, name, apiKey, apiToken string) (*ListResponse, error) {
+	fmt.Println("Creating list")
 	url := fmt.Sprintf("https://api.trello.com/1/lists?name=%s&idBoard=%s&key=%s&token=%s", name, idBoard, apiKey, apiToken)
 
 	req, err := http.NewRequest("POST", url, nil)
