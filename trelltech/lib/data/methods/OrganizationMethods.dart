@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/BoardEntity.dart';
 import 'package:trelltech/data/entities/MemberEntity.dart';
 import 'package:trelltech/data/entities/OrganizationEntity.dart';
+import 'package:http/http.dart' as http;
 
 class OrganizationMethods {
   Future<OrganizationEntity> get(String id) {
@@ -32,15 +36,13 @@ class OrganizationMethods {
         ]);
   }
 
-  Future<List<OrganizationEntity>> getJoinedOrganizations(MemberEntity memberEntity) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-        [
-          OrganizationEntity(id: "idorga1", displayName: "displaynameorga"),
-          OrganizationEntity(id: "idorga2", displayName: "displaynameorga"),
-          OrganizationEntity(id: "idorga3", displayName: "displaynameorga")
-        ]);
+  Future<List<OrganizationEntity>> getJoinedOrganizations(
+      MemberEntity memberEntity) {
+    return http.get(
+        Uri.parse(Repository.SERVER_ADDRESS + '/get-all-organizations')).then((
+        res) => res.body).then((organizations) =>
+        json.decode(organizations).map((organization) =>
+            OrganizationEntity.fromJson(organization)));
   }
 
   Future<void> create(OrganizationEntity organizationEntity) {
