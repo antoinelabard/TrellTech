@@ -6,10 +6,9 @@ import 'package:trelltech/data/entities/BoardEntity.dart';
 import 'package:trelltech/data/entities/OrganizationEntity.dart';
 
 class OrganizationMethods {
-  dynamic get(String id) {
+  Future<dynamic> get(String id) {
     return http
-        .get(Uri.parse(
-        Repository.SERVER_ADDRESS + '/get-organization/' + id))
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-organization/' + id))
         .then((res) => res.body)
         .then((data) => json.decode(data))
         .then((board) => OrganizationEntity.fromJson(board));
