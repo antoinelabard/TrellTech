@@ -15,16 +15,6 @@ class OrganizationMethods {
             OrganizationEntity.fromJson(json.decode(organization)));
   }
 
-  Future<List<MemberEntity>> getMembers(OrganizationEntity organizationEntity) {
-    return Future.delayed(
-        Duration(seconds: 1),
-        () => [
-              MemberEntity(id: "idmember1", username: "username1"),
-              MemberEntity(id: "idmember2", username: "username2"),
-              MemberEntity(id: "idmember3", username: "username3")
-            ]);
-  }
-
   Future<List<dynamic>> getBoards(OrganizationEntity organizationEntity) {
     var id = organizationEntity.id ?? "";
     return http
