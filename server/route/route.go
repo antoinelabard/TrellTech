@@ -13,13 +13,13 @@ import (
 func WorkspaceRoutes(r *mux.Router) {
 	r.HandleFunc("/create-organization", controller.HandleCreateOrganization).Methods("POST")
 	r.HandleFunc("/delete-organization/{id}", controller.HandleDeleteOrganization).Methods("DELETE")
-	r.HandleFunc("/get-organization/{id}", handleGetOrganization).Methods("GET")
-	r.HandleFunc("/update-organization/{id}", handleUpdateOrganization).Methods("PUT")
-	r.HandleFunc("/get-all-organizations", handleGetAllOrganizations).Methods("GET")
-	r.HandleFunc("/get-organization-boards/{id}", handleGetOrganizationBoards).Methods("GET")
+	r.HandleFunc("/get-organization/{id}", HandleGetOrganization).Methods("GET")
+	r.HandleFunc("/update-organization/{id}", HandleUpdateOrganization).Methods("PUT")
+	r.HandleFunc("/get-all-organizations", HandleGetAllOrganizations).Methods("GET")
+	r.HandleFunc("/get-organization-boards/{id}", HandleGetOrganizationBoards).Methods("GET")
 }
 
-func handleGetOrganization(w http.ResponseWriter, r *http.Request) {
+func HandleGetOrganization(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -35,7 +35,7 @@ func handleGetOrganization(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func handleUpdateOrganization(w http.ResponseWriter, r *http.Request) {
+func HandleUpdateOrganization(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -50,7 +50,7 @@ func handleUpdateOrganization(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(response)
 }
-func handleGetAllOrganizations(w http.ResponseWriter, r *http.Request) {
+func HandleGetAllOrganizations(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -66,7 +66,7 @@ func handleGetAllOrganizations(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(responses)
 }
 
-func handleGetOrganizationBoards(w http.ResponseWriter, r *http.Request) {
+func HandleGetOrganizationBoards(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
