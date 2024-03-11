@@ -20,7 +20,7 @@ class ListMethods {
                   due: DateTime.now(),
                   idBoard: "idBoard",
                   idList: "idList",
-                  name: "CardName1"),
+                  name: "CardName1dddddd"),
               CardEntity(
                   id: "idCard2",
                   closed: false,

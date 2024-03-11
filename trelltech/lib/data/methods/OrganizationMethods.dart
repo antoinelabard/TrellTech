@@ -7,7 +7,7 @@ class OrganizationMethods {
     return Future.delayed(
         Duration(seconds: 1),
             () =>
-            OrganizationEntity(id: "idorga", displayName: "displaynameorga"));
+            OrganizationEntity(id: "idorga1", displayName: "displaynameorga1"));
   }
 
   Future<List<MemberEntity>> getMembers(OrganizationEntity organizationEntity) {
@@ -26,9 +26,9 @@ class OrganizationMethods {
         Duration(seconds: 1),
             () =>
         [
-          BoardEntity(id: "idboard1", name: "name1", idOrganization: "idorga"),
-          BoardEntity(id: "idboard2", name: "name2", idOrganization: "idorga"),
-          BoardEntity(id: "idboard3", name: "name3", idOrganization: "idorga"),
+          BoardEntity(id: "idboard1", name: "name122", idOrganization: "idorga1"),
+          BoardEntity(id: "idboard2", name: "name2", idOrganization: "idorga1"),
+          BoardEntity(id: "idboard3", name: "name3", idOrganization: "idorga1"),
         ]);
   }
 
@@ -37,9 +37,7 @@ class OrganizationMethods {
         Duration(seconds: 1),
             () =>
         [
-          OrganizationEntity(id: "idorga1", displayName: "displaynameorga"),
-          OrganizationEntity(id: "idorga2", displayName: "displaynameorga"),
-          OrganizationEntity(id: "idorga3", displayName: "displaynameorga")
+          OrganizationEntity(id: "idorga1", displayName: "displaynameorga1"),
         ]);
   }
 
