@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"net/http"
 	"os"
+	"server/route"
 )
 
 func main() {
@@ -17,16 +18,16 @@ func main() {
 	r := mux.NewRouter()
 
 	// WORKSPACES
-	WorkspaceRoutes(r)
+	route.WorkspaceRoutes(r)
 
 	// BOARDS
-	BoardRoutes(r)
+	route.BoardRoutes(r)
 
 	// LISTS
-	ListRoutes(r)
+	route.ListRoutes(r)
 
 	// CARDS
-	CardRoutes(r)
+	route.CardRoutes(r)
 
 	//SERVER
 	port := os.Getenv("PORT")

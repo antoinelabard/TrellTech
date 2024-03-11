@@ -22,7 +22,7 @@ func CreateBoard(r *http.Request, apiKey, apiToken string) (*Response, error) {
 	}
 
 	url := fmt.Sprintf("https://api.trello.com/1/boards/?name=%s&idOrganization=%s&key=%s&token=%s", createBoardRequest.Name, createBoardRequest.IdOrganization, apiKey, apiToken)
-	fmt.Printf("Creating board with URL: %s\n", url) // Ajout du message de débogage
+	fmt.Printf("Creating board with URL: %s\n", url)
 
 	reqBody, err := json.Marshal(createBoardRequest)
 	if err != nil {
@@ -52,7 +52,7 @@ func CreateBoard(r *http.Request, apiKey, apiToken string) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling response body: %v", err)
 	}
-	fmt.Printf("Board created with response: %v\n", response) // Ajout du message de débogage
+	fmt.Printf("Board created with response: %v\n", response)
 	return &response, nil
 }
 
@@ -130,7 +130,7 @@ type Board struct {
 func GetBoard(id, apiKey, apiToken string) (string, error) {
 	// Construction de l'URL de l'API
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s?key=%s&token=%s", id, apiKey, apiToken)
-	fmt.Printf("Getting board with URL: %s\n", url) // Ajout du message de débogage
+	fmt.Printf("Getting board with URL: %s\n", url)
 
 	// Création de la requête HTTP
 	req, err := http.NewRequest("GET", url, nil)
@@ -162,7 +162,7 @@ func GetBoard(id, apiKey, apiToken string) (string, error) {
 	}
 
 	// Retourner le nom du tableau
-	fmt.Printf("Board retrieved with name: %s\n", board.Name) // Ajout du message de débogage
+	fmt.Printf("Board retrieved with name: %s\n", board.Name)
 	return board.Name, nil
 }
 
@@ -204,14 +204,14 @@ func GetMembers(boardId, apiKey, apiToken string) ([]*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Members retrieved: %v\n", members) // Ajout du message de débogage
+	fmt.Printf("Members retrieved: %v\n", members)
 	return members, nil
 }
 
 func DeleteBoard(boardId, apiKey, apiToken string) error {
 	// Construction de l'URL de l'API
 	url := fmt.Sprintf("https://api.trello.com/1/boards/%s?key=%s&token=%s", boardId, apiKey, apiToken)
-	fmt.Printf("Deleting board with URL: %s\n", url) // Ajout du message de débogage
+	fmt.Printf("Deleting board with URL: %s\n", url)
 
 	// Création de la requête HTTP
 	req, err := http.NewRequest("DELETE", url, nil)
