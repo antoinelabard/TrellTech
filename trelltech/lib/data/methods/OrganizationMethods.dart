@@ -56,12 +56,3 @@ class OrganizationMethods {
   }
 }
 
-// List<dynamic> getJoinedOrganizations() async {
-//   var res = await http
-//       .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-all-organizations'))
-//       .then((res) => res.body)
-//       .then((organizations) => json
-//       .decode(organizations));
-//   res.map((organization) => OrganizationEntity.fromJson(organization)).toList();
-//   return res;
-// }
