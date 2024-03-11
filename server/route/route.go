@@ -1,4 +1,4 @@
-package main
+package route
 
 import (
 	"encoding/json"
@@ -89,13 +89,13 @@ func handleGetOrganizationBoards(w http.ResponseWriter, r *http.Request) {
 
 func BoardRoutes(r *mux.Router) {
 	r.HandleFunc("/create-board", controller.HandleCreateBoard).Methods("POST")
-	r.HandleFunc("/update-board/{id}", handleUpdateBoard).Methods("PUT")
-	r.HandleFunc("/get-board/{id}", handleGetBoard).Methods("GET")
+	r.HandleFunc("/update-board/{id}", HandleUpdateBoard).Methods("PUT")
+	r.HandleFunc("/get-board/{id}", HandleGetBoard).Methods("GET")
 	r.HandleFunc("/get-members/{boardId}", handleGetMembers).Methods("GET")
-	r.HandleFunc("/delete-board/{boardId}", handleDeleteBoard).Methods("DELETE")
+	r.HandleFunc("/delete-board/{boardId}", HandleDeleteBoard).Methods("DELETE")
 }
 
-func handleUpdateBoard(w http.ResponseWriter, r *http.Request) {
+func HandleUpdateBoard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -114,7 +114,7 @@ func handleUpdateBoard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func handleGetBoard(w http.ResponseWriter, r *http.Request) {
+func HandleGetBoard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -152,7 +152,7 @@ func handleGetMembers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(members)
 }
 
-func handleDeleteBoard(w http.ResponseWriter, r *http.Request) {
+func HandleDeleteBoard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
