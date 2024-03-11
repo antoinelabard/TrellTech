@@ -51,7 +51,8 @@ class OrganizationMethods {
   }
 
   Future<void> delete(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+    var id = organizationEntity.id ?? "";
+    return http.delete(
+        Uri.parse(Repository.SERVER_ADDRESS + '/delete-organization/' + id));
   }
 }
-
