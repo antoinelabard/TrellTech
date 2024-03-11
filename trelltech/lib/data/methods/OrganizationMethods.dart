@@ -36,8 +36,10 @@ class OrganizationMethods {
             .toList());
   }
 
-  Future<void> create(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+  Future<void> create(String displayName) {
+    return http.post(
+        Uri.parse(Repository.SERVER_ADDRESS + '/create-organization'),
+        body: json.encode({"displayName": displayName}));
   }
 
   Future<void> update(OrganizationEntity organizationEntity) {
