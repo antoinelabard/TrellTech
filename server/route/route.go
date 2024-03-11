@@ -174,14 +174,14 @@ func HandleDeleteBoard(w http.ResponseWriter, r *http.Request) {
 // LISTS
 
 func ListRoutes(r *mux.Router) {
-	r.HandleFunc("/create-list", handleCreateList).Methods("POST")
-	r.HandleFunc("/get-lists-board/{idBoard}", handleGetListsinaboard).Methods("GET")
-	r.HandleFunc("/update-list/{idList}", handleUpdateList).Methods("PUT")
-	r.HandleFunc("/get-cards/{idList}", handleGetCards).Methods("GET")
-	r.HandleFunc("/get-list/{idList}", handleGetList).Methods("GET")
+	r.HandleFunc("/create-list", HandleCreateList).Methods("POST")
+	r.HandleFunc("/get-lists-board/{idBoard}", HandleGetListsinaboard).Methods("GET")
+	r.HandleFunc("/update-list/{idList}", HandleUpdateList).Methods("PUT")
+	r.HandleFunc("/get-cards/{idList}", HandleGetCards).Methods("GET")
+	r.HandleFunc("/get-list/{idList}", HandleGetList).Methods("GET")
 }
 
-func handleCreateList(w http.ResponseWriter, r *http.Request) {
+func HandleCreateList(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -208,7 +208,7 @@ func handleCreateList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listResponse)
 }
 
-func handleGetListsinaboard(w http.ResponseWriter, r *http.Request) {
+func HandleGetListsinaboard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -227,7 +227,7 @@ func handleGetListsinaboard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(lists)
 }
 
-func handleUpdateList(w http.ResponseWriter, r *http.Request) {
+func HandleUpdateList(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -256,7 +256,7 @@ func handleUpdateList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(listResponse)
 }
 
-func handleGetCards(w http.ResponseWriter, r *http.Request) {
+func HandleGetCards(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -275,7 +275,7 @@ func handleGetCards(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cards)
 }
 
-func handleGetList(w http.ResponseWriter, r *http.Request) {
+func HandleGetList(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -297,13 +297,13 @@ func handleGetList(w http.ResponseWriter, r *http.Request) {
 // CARDS
 
 func CardRoutes(r *mux.Router) {
-	r.HandleFunc("/create-card", handleCreateCard).Methods("POST")
-	r.HandleFunc("/get-card/{id}", handleGetCard).Methods("GET")
-	r.HandleFunc("/update-card/{id}", handleUpdateCard).Methods("PUT")
-	r.HandleFunc("/delete-card/{id}", handleDeleteCard).Methods("DELETE")
+	r.HandleFunc("/create-card", HandleCreateCard).Methods("POST")
+	r.HandleFunc("/get-card/{id}", HandleGetCard).Methods("GET")
+	r.HandleFunc("/update-card/{id}", HandleUpdateCard).Methods("PUT")
+	r.HandleFunc("/delete-card/{id}", HandleDeleteCard).Methods("DELETE")
 }
 
-func handleCreateCard(w http.ResponseWriter, r *http.Request) {
+func HandleCreateCard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -330,7 +330,7 @@ func handleCreateCard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cardResponse)
 }
 
-func handleGetCard(w http.ResponseWriter, r *http.Request) {
+func HandleGetCard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -348,7 +348,7 @@ func handleGetCard(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(cardResponse)
 }
-func handleUpdateCard(w http.ResponseWriter, r *http.Request) {
+func HandleUpdateCard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
@@ -399,7 +399,7 @@ func DeleteCard(id, apiKey, apiToken string) error {
 	return nil
 }
 
-func handleDeleteCard(w http.ResponseWriter, r *http.Request) {
+func HandleDeleteCard(w http.ResponseWriter, r *http.Request) {
 	apiKey, apiToken, err := utils.LoadAPIKeys()
 	if err != nil {
 		http.Error(w, "Error loading API keys", http.StatusInternalServerError)
