@@ -36,13 +36,14 @@ class OrganizationMethods {
         ]);
   }
 
-  Future<List<OrganizationEntity>> getJoinedOrganizations(
-      MemberEntity memberEntity) {
-    return http.get(
-        Uri.parse(Repository.SERVER_ADDRESS + '/get-all-organizations')).then((
-        res) => res.body).then((organizations) =>
-        json.decode(organizations).map((organization) =>
-            OrganizationEntity.fromJson(organization)));
+  Future<dynamic> getJoinedOrganizations() {
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-all-organizations'))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((organizations) => organizations
+            .map((organization) => OrganizationEntity.fromJson(organization))
+            .toList());
   }
 
   Future<void> create(OrganizationEntity organizationEntity) {
