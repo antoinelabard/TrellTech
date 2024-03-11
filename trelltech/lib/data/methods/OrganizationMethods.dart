@@ -22,8 +22,13 @@ class OrganizationMethods {
             Repository.SERVER_ADDRESS + '/get-organization-boards/' + id))
         .then((res) => res.body)
         .then((data) => json.decode(data))
-        .then((boards) =>
-            boards.map((board) => BoardEntity.fromJson(board)).toList());
+        .then((boards) => boards
+                .map((board) => BoardEntity.fromJson(board))
+                .toList()
+                .map((boardEntity) {
+              boardEntity.idOrganization = id;
+              return boardEntity;
+            }));
   }
 
   Future<List<dynamic>> getJoinedOrganizations() {
