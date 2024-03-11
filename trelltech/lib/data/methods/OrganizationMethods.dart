@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/BoardEntity.dart';
-import 'package:trelltech/data/entities/MemberEntity.dart';
 import 'package:trelltech/data/entities/OrganizationEntity.dart';
 
 class OrganizationMethods {
-  Future<OrganizationEntity> get(String id) {
+  dynamic get(String id) {
     return http
-        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-organization/' + id))
+        .get(Uri.parse(
+        Repository.SERVER_ADDRESS + '/get-organization/' + id))
         .then((res) => res.body)
-        .then((organization) =>
-            OrganizationEntity.fromJson(json.decode(organization)));
+        .then((data) => json.decode(data))
+        .then((board) => OrganizationEntity.fromJson(board));
   }
 
   Future<List<dynamic>> getBoards(OrganizationEntity organizationEntity) {
