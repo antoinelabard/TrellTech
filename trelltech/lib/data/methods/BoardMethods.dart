@@ -26,15 +26,23 @@ class BoardMethods {
   }
 
   Future<void> create(BoardEntity boardEntity) {
-    return Future(() => null);
+    return http.post(
+        Uri.parse(Repository.SERVER_ADDRESS + '/create-board'),
+        body: boardEntity.toJson());
   }
 
   Future<void> update(BoardEntity boardEntity) {
-    return Future(() => null);
+    var id = boardEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-board/' + id),
+        body: boardEntity.toJson());
   }
 
   Future<void> delete(BoardEntity boardEntity) {
-    return Future(() => null);
+    var id = boardEntity.id ?? "";
+    return http.delete(
+        Uri.parse(Repository.SERVER_ADDRESS + '/delete-board/' + id),
+        body: boardEntity.toJson());
   }
 
   Future<List<ListEntity>> getLists(String id) {
