@@ -1,12 +1,17 @@
 import 'package:trelltech/data/entities/CardEntity.dart';
 import 'package:trelltech/data/entities/ListEntity.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:trelltech/data/Repository.dart';
+import 'dart:convert';
 import '../entities/BoardEntity.dart';
 
 class ListMethods {
   Future<ListEntity> get(String id) {
-    return Future.delayed(Duration(seconds: 1),
-        () => ListEntity(id: "idEntity", idBoard: "idBoard", name: "listName"));
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-list/' + id))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((list) => ListEntity.fromJson(list));
   }
 
   Future<List<CardEntity>> getCards(String id) {
