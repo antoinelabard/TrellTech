@@ -47,7 +47,10 @@ class OrganizationMethods {
   }
 
   Future<void> update(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+    var id = organizationEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-organization/' + id),
+        body: json.encode({"displayName": organizationEntity.displayName}));
   }
 
   Future<void> delete(OrganizationEntity organizationEntity) {
