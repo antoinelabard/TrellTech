@@ -26,16 +26,23 @@ class ListMethods {
             (cards) => cards.map((card) => CardEntity.fromJson(card)).toList());
   }
 
-  Future<void> create(BoardEntity boardEntity) {
-    return Future(() => null);
+  Future<void> create(ListEntity listEntity) {
+    return http.post(Uri.parse(Repository.SERVER_ADDRESS + '/create-list'),
+        body: listEntity.toJson());
   }
 
-  Future<void> update(BoardEntity boardEntity) {
-    return Future(() => null);
+  Future<void> update(ListEntity listEntity) {
+    var id = listEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-list/' + id),
+        body: listEntity.toJson());
   }
 
-  Future<void> delete(BoardEntity boardEntity) {
-    return Future(() => null);
+  Future<void> delete(ListEntity listEntity) {
+    var id = listEntity.id ?? "";
+    return http.delete(
+        Uri.parse(Repository.SERVER_ADDRESS + '/delete-list/' + id),
+        body: listEntity.toJson());
   }
 
   Future<List<ListEntity>> getLists(String id) {
