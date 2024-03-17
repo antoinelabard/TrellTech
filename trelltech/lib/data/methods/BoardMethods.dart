@@ -1,14 +1,17 @@
 import 'package:trelltech/data/entities/ListEntity.dart';
 import 'package:trelltech/data/entities/MemberEntity.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:trelltech/data/Repository.dart';
 import '../entities/BoardEntity.dart';
 
 class BoardMethods {
-  Future<BoardEntity> get(String id) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-            BoardEntity(id: "idboard", name: "name", idOrganization: "idorga"));
+  Future<dynamic> get(String id) {
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-board/' + id))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((board) => BoardEntity.fromJson(board));
   }
 
   Future<List<MemberEntity>> getMembers(String id) {
