@@ -1,11 +1,8 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/CardEntity.dart';
 import 'package:trelltech/data/entities/ListEntity.dart';
-
-import '../entities/BoardEntity.dart';
 
 class ListMethods {
   Future<dynamic> get(String id) {
@@ -43,15 +40,5 @@ class ListMethods {
     return http.delete(
         Uri.parse(Repository.SERVER_ADDRESS + '/delete-list/' + id),
         body: listEntity.toJson());
-  }
-
-  Future<List<ListEntity>> getLists(String id) {
-    return Future.delayed(
-        Duration(seconds: 1),
-        () => [
-              ListEntity(id: "idlist1", idBoard: "idBoard", name: "listName1"),
-              ListEntity(id: "idlist2", idBoard: "idBoard", name: "listName2"),
-              ListEntity(id: "idlist3", idBoard: "idBoard", name: "listName3")
-            ]);
   }
 }
