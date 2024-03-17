@@ -1,12 +1,14 @@
-import 'package:trelltech/data/entities/CardEntity.dart';
-import 'package:trelltech/data/entities/ListEntity.dart';
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:trelltech/data/Repository.dart';
-import 'dart:convert';
+import 'package:trelltech/data/entities/CardEntity.dart';
+import 'package:trelltech/data/entities/ListEntity.dart';
+
 import '../entities/BoardEntity.dart';
 
 class ListMethods {
-  Future<ListEntity> get(String id) {
+  Future<dynamic> get(String id) {
     return http
         .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-list/' + id))
         .then((res) => res.body)
@@ -14,35 +16,14 @@ class ListMethods {
         .then((list) => ListEntity.fromJson(list));
   }
 
-  Future<List<CardEntity>> getCards(String id) {
-    return Future.delayed(
-        Duration(seconds: 1),
-        () => [
-              CardEntity(
-                  id: "idCard1",
-                  closed: false,
-                  dateLastActivity: DateTime.now(),
-                  due: DateTime.now(),
-                  idBoard: "idBoard",
-                  idList: "idList",
-                  name: "CardName1"),
-              CardEntity(
-                  id: "idCard2",
-                  closed: false,
-                  dateLastActivity: DateTime.now(),
-                  due: DateTime.now(),
-                  idBoard: "idBoard",
-                  idList: "idList",
-                  name: "CardName2"),
-              CardEntity(
-                  id: "idCard3",
-                  closed: false,
-                  dateLastActivity: DateTime.now(),
-                  due: DateTime.now(),
-                  idBoard: "idBoard",
-                  idList: "idList",
-                  name: "CardName3")
-            ]);
+  Future<List<dynamic>> getCards(ListEntity listEntity) {
+    var id = listEntity.id ?? "";
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-cards/' + id))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then(
+            (cards) => cards.map((card) => CardEntity.fromJson(card)).toList());
   }
 
   Future<void> create(BoardEntity boardEntity) {
