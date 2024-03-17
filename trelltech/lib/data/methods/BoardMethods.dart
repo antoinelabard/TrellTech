@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/ListEntity.dart';
+import 'package:trelltech/data/entities/MemberEntity.dart';
 
 import '../entities/BoardEntity.dart';
 
@@ -22,12 +23,11 @@ class BoardMethods {
         .then((res) => res.body)
         .then((data) => json.decode(data))
         .then((members) =>
-            members.map((member) => BoardEntity.fromJson(member)).toList());
+            members.map((member) => MemberEntity.fromJson(member)).toList());
   }
 
   Future<void> create(BoardEntity boardEntity) {
-    return http.post(
-        Uri.parse(Repository.SERVER_ADDRESS + '/create-board'),
+    return http.post(Uri.parse(Repository.SERVER_ADDRESS + '/create-board'),
         body: boardEntity.toJson());
   }
 
@@ -45,13 +45,15 @@ class BoardMethods {
         body: boardEntity.toJson());
   }
 
-  Future<List<ListEntity>> getLists(String id) {
-    return Future.delayed(
-        Duration(seconds: 1),
-        () => [
-              ListEntity(id: "idlist1", idBoard: "idBoard", name: "listName1"),
-              ListEntity(id: "idlist2", idBoard: "idBoard", name: "listName2"),
-              ListEntity(id: "idlist3", idBoard: "idBoard", name: "listName3")
-            ]);
+  Future<List<ListEntity>> getLists(BoardEntity boardEntity) {
+    var id = boardEntity.id ?? "";
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS +
+            '/get-members/' +
+            id)) //Todo complete the endpoint
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((lists) =>
+            lists.map((list) => ListEntity.fromJson(list)).toList());
   }
 }
