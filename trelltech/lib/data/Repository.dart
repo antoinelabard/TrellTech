@@ -1,3 +1,4 @@
+import 'package:trelltech/data/entities/OrganizationEntity.dart';
 import 'package:trelltech/data/methods/CardMethods.dart';
 import 'package:trelltech/data/methods/ListMethods.dart';
 import 'package:trelltech/data/methods/MemberMethods.dart';
@@ -14,6 +15,12 @@ class Repository {
   static ListMethods listMethods = ListMethods();
 }
 
+//Todo Remove the following code before merging to dev
+var exampleOrgaId = "61a4d8601bd6943d9d6296a5";
+var newOrgaName = "nameeeeeeeeee";
+
 Future<void> main() async {
-  print((await Repository.Organization.get("65e6f53467498554d19a6215")).displayName);
+  // await Repository.Organization.create("monorga");
+  print(await Repository.Organization.getBoards(
+      OrganizationEntity(id: exampleOrgaId)));
 }
