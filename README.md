@@ -5,6 +5,11 @@ Trello API.
 
 The frontend is a flutter app that connect to a backend, which fetch the data from Trello.
 
+> The user manual is available here : **[User Manual](docs/User manual.md)**.
+>
+> For technical documentation, you can refer to the **[API documentation](docs/API documentation.md)** and
+> the **[Technical documentation](docs/Technical documentation.md)**.
+
 ## Getting Started
 
 You can clone this repository using:
