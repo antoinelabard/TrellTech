@@ -38,8 +38,11 @@ flutter run
 To run the backend, you need to have [Go](https://go.dev/) and [Docker](https://www.docker.com/) installed.
 
 ```bash
-docker build -t server .
-docker run -p 8080:8080 server
+docker build -t trelltech-app .
+docker run --name trelltech -p 8080:8080 trelltech-app
+
+docker start trelltech
+docker stop trelltech
 ```
 
 For further documentation on how to use the backend, please refer to . #TODO

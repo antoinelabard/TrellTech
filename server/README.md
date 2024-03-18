@@ -32,14 +32,3 @@
 ## Licence
 
 Ajoutez ici des informations sur la licence de votre projet.
-
-
-
-DOCKER : 
-
-docker build -t trelltech-app .
-docker run --name trelltech -p 8080:8080 trelltech-app
-
-docker start trelltech
-docker stop trelltech
-
