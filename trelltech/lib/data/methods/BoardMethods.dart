@@ -48,12 +48,10 @@ class BoardMethods {
   Future<List<ListEntity>> getLists(BoardEntity boardEntity) {
     var id = boardEntity.id ?? "";
     return http
-        .get(Uri.parse(Repository.SERVER_ADDRESS +
-            '/get-members/' +
-            id)) //Todo complete the endpoint
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-lists-board/' + id))
         .then((res) => res.body)
         .then((data) => json.decode(data))
-        .then((lists) =>
-            lists.map((list) => ListEntity.fromJson(list)).toList());
+        .then(
+            (lists) => lists.map((list) => ListEntity.fromJson(list)).toList());
   }
 }
