@@ -10,7 +10,20 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return Column(children: [
+      Text(cardEntity.name!),
+      ElevatedButton(
+        onPressed: () {
+          // Ajoutez le code à exécuter lorsque le bouton de la carte est pressé
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.yellow,
+        ).copyWith(
+          minimumSize: MaterialStateProperty.all(Size(double.infinity, 48.0)),
+        ),
+        child: Text("Rename"),
+      ),
+      ElevatedButton(
       onPressed: () {
         // Ajoutez le code à exécuter lorsque le bouton de la carte est pressé
       },
@@ -19,7 +32,7 @@ class CardWidget extends StatelessWidget {
       ).copyWith(
         minimumSize: MaterialStateProperty.all(Size(double.infinity, 48.0)),
       ),
-      child: Text(cardEntity.name!),
-    );
+      child: Text("Delete"),
+    )]);
   }
 }
