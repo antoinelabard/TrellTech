@@ -5,57 +5,71 @@ import '../data/Repository.dart';
 import '../data/entities/CardEntity.dart';
 import '../data/entities/ListEntity.dart';
 
-/*
-create a list of CardWidget that can expand vertically to fit the content
- */
-
-class ListWidget extends StatelessWidget {
+class ListWidget extends StatefulWidget {
   final ListEntity listEntity;
 
   ListWidget({super.key, required this.listEntity});
 
   @override
+  State<ListWidget> createState() => _ListWidgetState();
+}
+
+class _ListWidgetState extends State<ListWidget> {
+  List<CardEntity> cards = [];
+  final myController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Repository.List.getCards(listEntity.id!),
+      future: Repository.List.getCards(widget.listEntity.id!),
       builder: (context, AsyncSnapshot<List<CardEntity>> cardSnapshot) {
         if (cardSnapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (cardSnapshot.hasError) {
           return Text('Erreur de chargement des cartes');
         } else {
+          cardSnapshot.data?.forEach((element) {
+            cards.add(element);
+          });
           return Card(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                ListTile(
-                    title: Text(listEntity.name! +
-                        cardSnapshot.data!.length.toString() +
-                        " cards")),
+                ListTile(title: Text(widget.listEntity.name!)),
                 Flexible(
                   fit: FlexFit.loose,
                   child: ListView.builder(
-                      itemCount: cardSnapshot.data?.length ?? 0,
+                      itemCount: cards.length,
                       shrinkWrap: true,
-                      // physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) =>
-                          CardWidget(cardEntity: cardSnapshot.data![index])),
+                      itemBuilder: (context, index) => CardWidget(
+                          cardEntity: cards[index],
+                          deleteCallback: () => removeCard(cards[index]))),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Repository.List.getCards(listEntity.id!);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: Text('Add Card'),
-                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Repository.List.getCards(widget.listEntity.id!);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Text('Add Card'),
+                    )
+                  ],
+                )
               ],
             ),
           );
         }
       },
     );
+  }
+
+  void removeCard(CardEntity card) {
+    setState(() {
+      cards.remove(card);
+    });
   }
 }
