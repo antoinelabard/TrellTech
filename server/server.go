@@ -1,29 +1,37 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"log"
 	"net/http"
 	"os"
+	"server/route"
 )
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		fmt.Println("Error loading .env file")
+		log.Println("Error loading .env file")
 		return
 	}
 
 	r := mux.NewRouter()
 
 	// WORKSPACES
-	WorkspaceRoutes(r)
+	log.Println("Setting up Workspace routes")
+	route.WorkspaceRoutes(r)
 
 	// BOARDS
-	BoardRoutes(r)
+	log.Println("Setting up Board routes")
+	route.BoardRoutes(r)
 
 	// LISTS
-	ListRoutes(r)
+	log.Println("Setting up List routes")
+	route.ListRoutes(r)
+
+	// CARDS
+	log.Println("Setting up Card routes")
+	route.CardRoutes(r)
 
 	//SERVER
 	port := os.Getenv("PORT")
@@ -31,6 +39,8 @@ func main() {
 		port = "8080"
 	}
 
-	fmt.Printf("Server listening on port %s\n", port)
-	http.ListenAndServe(":"+port, r)
+	log.Printf("Server listening on port %s\n", port)
+	if err := http.ListenAndServe(":"+port, r); err != nil {
+		log.Fatalf("Server failed to start: %v", err)
+	}
 }
