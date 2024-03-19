@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trelltech/widgets/CardWidget.dart';
 
 import '../data/Repository.dart';
 import '../data/entities/CardEntity.dart';
@@ -31,18 +32,7 @@ class ListWidget extends StatelessWidget {
                   ),
                   Column(
                     children: cardSnapshot.data?.map((card) {
-                          return ElevatedButton(
-                            onPressed: () {
-                              // Ajoutez le code à exécuter lorsque le bouton de la carte est pressé
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow,
-                            ).copyWith(
-                              minimumSize: MaterialStateProperty.all(
-                                  Size(double.infinity, 48.0)),
-                            ),
-                            child: Text(card.name!),
-                          );
+                          return CardWidget(cardEntity: card);
                         }).toList() ??
                         [],
                   ),
