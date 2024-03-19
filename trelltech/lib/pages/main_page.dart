@@ -3,7 +3,7 @@ import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/BoardEntity.dart';
 import 'package:trelltech/data/entities/MemberEntity.dart';
 import 'package:trelltech/data/entities/OrganizationEntity.dart';
-import 'package:trelltech/board_page.dart';
+import 'package:trelltech/pages/board_page.dart';
 
 void main() {
   runApp(MyApp());
