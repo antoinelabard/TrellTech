@@ -1,14 +1,11 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/ListEntity.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:trelltech/widgets/ListWidget.dart';
-
-import '../data/entities/CardEntity.dart';
 
 class BoardDetailPage extends StatefulWidget {
   final String boardName;
-
   BoardDetailPage({required this.boardName});
 
   @override
@@ -34,24 +31,8 @@ class _BoardDetailPageState extends State<BoardDetailPage> {
               itemCount: snapshot.data?.length ?? 0,
               itemBuilder: (context, index, realIndex) {
                 ListEntity listEntity = snapshot.data![index];
-                return FutureBuilder(
-                  future: Repository.List.getCards(listEntity.id!),
-                  builder:
-                      (context, AsyncSnapshot<List<CardEntity>> cardSnapshot) {
-                    if (cardSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (cardSnapshot.hasError) {
-                      return Text('Erreur de chargement des cartes');
-                    } else {
-                      return ListWidget(
-                        listEntity: listEntity,
-                        cards: cardSnapshot.data ?? [],
-                      );
-                    }
-                  },
-                );
-                ;
+
+                return ListWidget(listEntity: listEntity);
               },
               options: CarouselOptions(
                 height: null,

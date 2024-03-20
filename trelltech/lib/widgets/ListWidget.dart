@@ -7,9 +7,8 @@ import '../data/entities/ListEntity.dart';
 
 class ListWidget extends StatefulWidget {
   final ListEntity listEntity;
-  final List<CardEntity> cards;
 
-  ListWidget({super.key, required this.listEntity, required this.cards});
+  ListWidget({super.key, required this.listEntity});
 
   @override
   State<ListWidget> createState() => _ListWidgetState();
