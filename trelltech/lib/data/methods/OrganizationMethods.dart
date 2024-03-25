@@ -1,55 +1,61 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:trelltech/data/Repository.dart';
 import 'package:trelltech/data/entities/BoardEntity.dart';
-import 'package:trelltech/data/entities/MemberEntity.dart';
 import 'package:trelltech/data/entities/OrganizationEntity.dart';
 
 class OrganizationMethods {
-  Future<OrganizationEntity> get(String id) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-            OrganizationEntity(id: "idorga1", displayName: "displaynameorga1"));
+  Future<dynamic> get(String id) {
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-organization/' + id))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((board) => OrganizationEntity.fromJson(board));
   }
 
-  Future<List<MemberEntity>> getMembers(OrganizationEntity organizationEntity) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-        [
-          MemberEntity(id: "idmember1", username: "username1"),
-          MemberEntity(id: "idmember2", username: "username2"),
-          MemberEntity(id: "idmember3", username: "username3")
-        ]);
+  Future<List<dynamic>> getBoards(OrganizationEntity organizationEntity) {
+    var id = organizationEntity.id ?? "";
+    return http
+        .get(Uri.parse(
+            Repository.SERVER_ADDRESS + '/get-organization-boards/' + id))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((boards) => boards
+                .map((board) => BoardEntity.fromJson(board))
+                .toList()
+                .map((boardEntity) {
+              boardEntity.idOrganization = id;
+              return boardEntity;
+            }));
   }
 
-  Future<List<BoardEntity>> getBoards(OrganizationEntity organizationEntity) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-        [
-          BoardEntity(id: "idboard1", name: "name122", idOrganization: "idorga1"),
-          BoardEntity(id: "idboard2", name: "name2", idOrganization: "idorga1"),
-          BoardEntity(id: "idboard3", name: "name3", idOrganization: "idorga1"),
-        ]);
+  Future<List<dynamic>> getJoinedOrganizations() {
+    return http
+        .get(Uri.parse(Repository.SERVER_ADDRESS + '/get-all-organizations'))
+        .then((res) => res.body)
+        .then((data) => json.decode(data))
+        .then((organizations) => organizations
+            .map((organization) => OrganizationEntity.fromJson(organization))
+            .toList());
   }
 
-  Future<List<OrganizationEntity>> getJoinedOrganizations(MemberEntity memberEntity) {
-    return Future.delayed(
-        Duration(seconds: 1),
-            () =>
-        [
-          OrganizationEntity(id: "idorga1", displayName: "displaynameorga1"),
-        ]);
-  }
-
-  Future<void> create(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+  Future<void> create(String displayName) {
+    return http.post(
+        Uri.parse(Repository.SERVER_ADDRESS + '/create-organization'),
+        body: json.encode({"displayName": displayName}));
   }
 
   Future<void> update(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+    var id = organizationEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-organization/' + id),
+        body: json.encode({"displayName": organizationEntity.displayName}));
   }
 
   Future<void> delete(OrganizationEntity organizationEntity) {
-    return Future(() => null);
+    var id = organizationEntity.id ?? "";
+    return http.delete(
+        Uri.parse(Repository.SERVER_ADDRESS + '/delete-organization/' + id));
   }
 }

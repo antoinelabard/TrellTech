@@ -7,7 +7,7 @@ class OrganizationEntity {
 
   OrganizationEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    displayName = json['displayName'];
+    displayName = json['name'];
   }
 
   Map<String, dynamic> toJson() {
