@@ -1,4 +1,7 @@
+import 'package:http/http.dart' as http;
 import 'package:trelltech/data/entities/CardEntity.dart';
+
+import '../Repository.dart';
 
 class CardMethods {
   Future<CardEntity> get(String id) {
@@ -9,14 +12,21 @@ class CardMethods {
   }
 
   Future<void> create(CardEntity cardEntity) {
-    return Future(() => null);
+    return http.post(Uri.parse(Repository.SERVER_ADDRESS + '/create-card'),
+        body: cardEntity.toJson());
   }
 
   Future<void> update(CardEntity cardEntity) {
-    return Future(() => null);
+    var id = cardEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-card/' + id),
+        body: cardEntity.toJson());
   }
 
   Future<void> delete(CardEntity cardEntity) {
-    return Future(() => null);
+    var id = cardEntity.id ?? "";
+    return http.delete(
+        Uri.parse(Repository.SERVER_ADDRESS + '/delete-card/' + id),
+        body: cardEntity.toJson());
   }
 }
