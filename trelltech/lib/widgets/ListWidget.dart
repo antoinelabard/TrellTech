@@ -16,7 +16,7 @@ class ListWidget extends StatefulWidget {
 
 class _ListWidgetState extends State<ListWidget> {
   List<CardEntity> cards = [];
-  final myController = TextEditingController();
+  final TextEditingController _newCardController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +48,23 @@ class _ListWidgetState extends State<ListWidget> {
                 ),
                 Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Repository.List.getCards(widget.listEntity.id!);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: _newCardController,
+                        // decoration: const InputDecoration(hintText: 'New List Name'),
                       ),
-                      child: Text('Add Card'),
-                    )
+                    ),
+                    ElevatedButton(
+                      child: Text('Add List'),
+                      onPressed: () {
+                        Repository.Card.create(CardEntity(
+                            idBoard: widget.listEntity.idBoard!,
+                            idList: widget.listEntity.id!,
+                            name: _newCardController.text));
+                        _newCardController.clear();
+                      },
+                    ),
                   ],
                 )
               ],

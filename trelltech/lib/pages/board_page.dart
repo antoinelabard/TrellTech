@@ -41,6 +41,7 @@ class _BoardDetailPageState extends State<BoardDetailPage> {
                   Repository.List.create(ListEntity(
                       idBoard: widget.boardEntity.id!,
                       name: _newListController.text));
+                  _newListController.clear();
                 },
               ),
             ],
