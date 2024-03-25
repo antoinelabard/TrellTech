@@ -31,40 +31,36 @@ class _ListWidgetState extends State<ListWidget> {
           cardSnapshot.data?.forEach((element) {
             cards.add(element);
           });
-          return DragTarget<CardEntity>(
-            builder: (context, candidateItems, rejectedItems) {
-              return Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+          return Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                ListTile(title: Text(widget.listEntity.name!)),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: ListView.builder(
+                      itemCount: cards.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => CardWidget(
+                          cardEntity: cards[index],
+                          deleteCallback: () => removeCard(cards[index]))),
+                ),
+                Row(
                   children: [
-                    ListTile(title: Text(widget.listEntity.name!)),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: ListView.builder(
-                          itemCount: cards.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) => CardWidget(
-                              cardEntity: cards[index],
-                              deleteCallback: () => removeCard(cards[index]))),
-                    ),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Repository.List.getCards(widget.listEntity.id!);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                          ),
-                          child: Text('Add Card'),
-                        )
-                      ],
+                    ElevatedButton(
+                      onPressed: () {
+                        Repository.List.getCards(widget.listEntity.id!);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: Text('Add Card'),
                     )
                   ],
-                ),
-              );
-            },
+                )
+              ],
+            ),
           );
         }
       },
