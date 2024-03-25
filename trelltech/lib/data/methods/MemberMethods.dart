@@ -1,6 +1,9 @@
 import 'package:trelltech/data/entities/BoardEntity.dart';
 import 'package:trelltech/data/entities/MemberEntity.dart';
 
+import '../Repository.dart';
+import 'package:http/http.dart' as http;
+
 class MemberMethods {
   Future<MemberEntity> get(String id) {
     return Future.delayed(
@@ -9,8 +12,10 @@ class MemberMethods {
   }
 
   Future<void> update(MemberEntity memberEntity) {
-    return Future(() => null);
-  }
+    var id = memberEntity.id ?? "";
+    return http.put(
+        Uri.parse(Repository.SERVER_ADDRESS + '/update-board/' + id),
+        body: memberEntity.toJson());  }
 
   Future<List<BoardEntity>> getBoards(String id) {
     return Future.delayed(
