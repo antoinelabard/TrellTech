@@ -47,7 +47,7 @@ class _BoardDetailPageState extends State<BoardDetailPage> {
             ],
           ),
           FutureBuilder(
-            future: Repository.List.getLists("boardId"),
+            future: Repository.Board.getLists(widget.boardEntity),
             builder: (context, AsyncSnapshot<List<ListEntity>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();

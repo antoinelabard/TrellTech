@@ -21,8 +21,8 @@ class _ListWidgetState extends State<ListWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Repository.List.getCards(widget.listEntity.id!),
-      builder: (context, AsyncSnapshot<List<CardEntity>> cardSnapshot) {
+      future: Repository.List.getCards(widget.listEntity),
+      builder: (context, AsyncSnapshot<List<dynamic>> cardSnapshot) {
         if (cardSnapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (cardSnapshot.hasError) {

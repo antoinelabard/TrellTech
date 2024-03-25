@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   dynamic selectedWorkspace = 'Boards'; // Default category
   String? selectedOrganizationId;
-  List<OrganizationEntity> organizationList = []; // Updated organization list
+  List<dynamic> organizationList = []; // Updated organization list
   List<BoardEntity> boardList = []; // Updated board list
 
   @override
@@ -43,14 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
       MemberEntity currentUser = await Repository.Member.get("userId");
 
       // Get the joined organizations
-      organizationList =
-          await Repository.Organization.getJoinedOrganizations(currentUser);
+      organizationList = await Repository.Organization.getJoinedOrganizations();
 
       // Get the boards for each organization
       for (OrganizationEntity organization in organizationList) {
-        List<BoardEntity> boards =
+        List<dynamic> boards =
             await Repository.Organization.getBoards(organization);
-        boardList.addAll(boards);
+        boardList.addAll(boards as Iterable<BoardEntity>);
       }
 
       // Set default organization and workspace
@@ -207,8 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BoardDetailPage(
-                    boardEntity: board),
+                  builder: (context) => BoardDetailPage(boardEntity: board),
                 ),
               );
             },

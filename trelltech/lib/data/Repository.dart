@@ -11,7 +11,7 @@ class Repository {
   static OrganizationMethods Organization = OrganizationMethods();
   static CardMethods Card = CardMethods();
   static MemberMethods Member = MemberMethods();
-  static ListMethods listMethods = ListMethods();
+  static ListMethods List = ListMethods();
 }
 
 //Todo Remove the following code before merging to dev
@@ -20,6 +20,5 @@ var newOrgaName = "nameeeeeeeeee";
 
 Future<void> main() async {
   // await Repository.Organization.create("monorga");
-  print(await Repository.Organization.getBoards(
-      OrganizationEntity(id: exampleOrgaId)));
+  print(await Repository.Organization.getJoinedOrganizations());
 }
