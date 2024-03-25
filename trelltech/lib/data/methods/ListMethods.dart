@@ -40,7 +40,7 @@ class ListMethods {
             ]);
   }
 
-  Future<void> create(BoardEntity boardEntity) {
+  Future<void> create(ListEntity listEntity) {
     return Future(() => null);
   }
 

@@ -44,12 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Get the joined organizations
       organizationList =
-      await Repository.Organization.getJoinedOrganizations(currentUser);
+          await Repository.Organization.getJoinedOrganizations(currentUser);
 
       // Get the boards for each organization
       for (OrganizationEntity organization in organizationList) {
-        List<BoardEntity> boards = await Repository.Organization.getBoards(
-            organization);
+        List<BoardEntity> boards =
+            await Repository.Organization.getBoards(organization);
         boardList.addAll(boards);
       }
 
@@ -126,25 +126,21 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Workspaces'),
               children: List.generate(
                 organizationList.length,
-                    (index) =>
-                    ListTile(
-                      leading: Icon(Icons.group),
-                      title: Text(organizationList[index].displayName ??
-                          'Unknown Organization'),
-                      onTap: () {
-                        // Set the selectedWorkspace to the organization's displayName
-                        setState(() {
-                          selectedWorkspace =
-                              organizationList[index].displayName;
-                          selectedOrganizationId = organizationList[index].id;
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
+                (index) => ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text(organizationList[index].displayName ??
+                      'Unknown Organization'),
+                  onTap: () {
+                    // Set the selectedWorkspace to the organization's displayName
+                    setState(() {
+                      selectedWorkspace = organizationList[index].displayName;
+                      selectedOrganizationId = organizationList[index].id;
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
-
-
           ],
         ),
       ),
@@ -163,8 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // Filtrer les tableaux pour afficher uniquement ceux liés à l'espace de travail sélectionné
           List<BoardEntity> boardsForSelectedWorkspace = boardList
               .where((board) =>
-          board.idOrganization == organization.id &&
-              board.idOrganization != null)
+                  board.idOrganization == organization.id &&
+                  board.idOrganization != null)
               .toList();
 
           return ExpansionTile(
@@ -186,12 +182,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              BoardDetailPage(
-                                boardName: boardsForSelectedWorkspace[index]
-                                    .name ??
-                                    'Tableau inconnu',
-                              ),
+                          builder: (context) => BoardDetailPage(
+                              boardEntity: boardsForSelectedWorkspace[index]),
                         ),
                       );
                     },
@@ -215,10 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      BoardDetailPage(
-                        boardName: board.name ?? 'Tableau inconnu',
-                      ),
+                  builder: (context) => BoardDetailPage(
+                    boardEntity: board),
                 ),
               );
             },
